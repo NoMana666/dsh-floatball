@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Desktop float ball",
+    "description": "A whale floating ball on the desktop that follows the DSH lifecycle: pink during peak hours, blue off-peak, grey while DSH is closed. Hover glow, click squeeze animation, click to focus DSH, right-click to toggle auto-start.",
+    "detail": "docs/DETAIL.md"
+  }
+}

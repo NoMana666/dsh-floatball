@@ -1,0 +1,133 @@
+using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+
+public class MenuRender : ToolStripProfessionalRenderer
+{
+    public MenuRender() : base(new MenuColors()) { this.RoundedEdges = false; }
+
+    protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
+    {
+        var g = e.Graphics;
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+        var r = new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1);
+        using (var path = Round(r, 12))
+        {
+            using (var lg = new LinearGradientBrush(r, Color.FromArgb(255, 255, 255), Color.FromArgb(248, 250, 253), LinearGradientMode.Vertical))
+            {
+                g.FillPath(lg, path);
+            }
+            using (var inner = Round(new Rectangle(1, 1, r.Width - 2, r.Height - 2), 11))
+            using (var gloss = new LinearGradientBrush(new Rectangle(1, 1, r.Width - 2, 26), Color.FromArgb(120, 255, 255, 255), Color.FromArgb(0, 255, 255, 255), LinearGradientMode.Vertical))
+            {
+                g.FillPath(gloss, inner);
+            }
+            using (var p = new Pen(Color.FromArgb(56, 15, 23, 42), 1f))
+            {
+                g.DrawPath(p, path);
+            }
+        }
+    }
+
+    protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+    {
+        var item = e.Item;
+        if (!item.Selected && !item.Pressed) return;
+        var g = e.Graphics;
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        var r = new Rectangle(7, 2, item.Width - 14, item.Height - 4);
+        using (var path = Round(r, 8))
+        using (var b = new LinearGradientBrush(r,
+            item.Pressed ? Color.FromArgb(226, 234, 246) : Color.FromArgb(240, 245, 252),
+            item.Pressed ? Color.FromArgb(232, 240, 250) : Color.FromArgb(246, 249, 253),
+            LinearGradientMode.Vertical))
+        {
+            g.FillPath(b, path);
+        }
+        using (var path = Round(r, 8))
+        using (var p = new Pen(Color.FromArgb(38, 15, 23, 42), 1f))
+        {
+            g.DrawPath(p, path);
+        }
+    }
+
+    protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
+    {
+        var g = e.Graphics;
+        int y = e.Item.Height / 2;
+        var r = new Rectangle(18, y, e.Item.Width - 36, 1);
+        using (var b = new LinearGradientBrush(r, Color.FromArgb(0, 15, 23, 42), Color.FromArgb(38, 15, 23, 42), LinearGradientMode.Horizontal))
+        using (var b2 = new LinearGradientBrush(r, Color.FromArgb(38, 15, 23, 42), Color.FromArgb(0, 15, 23, 42), LinearGradientMode.Horizontal))
+        {
+            g.FillRectangle(b, new Rectangle(r.X, y, r.Width / 2, 1));
+            g.FillRectangle(b2, new Rectangle(r.X + r.Width / 2, y, r.Width / 2, 1));
+        }
+    }
+
+    protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
+    {
+        e.TextColor = e.Item.Enabled ? Color.FromArgb(23, 32, 48) : Color.FromArgb(150, 160, 175);
+        base.OnRenderItemText(e);
+    }
+
+    protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+    {
+        e.ArrowColor = Color.FromArgb(110, 122, 140);
+        base.OnRenderArrow(e);
+    }
+
+    protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e) { }
+
+    private static GraphicsPath Round(Rectangle r, int radius)
+    {
+        var path = new GraphicsPath();
+        int d = radius * 2;
+        if (d > r.Width) d = r.Width;
+        if (d > r.Height) d = r.Height;
+        path.AddArc(r.X, r.Y, d, d, 180, 90);
+        path.AddArc(r.Right - d, r.Y, d, d, 270, 90);
+        path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+        path.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+        return path;
+    }
+}
+
+public static class MenuShape
+{
+    public static void Round(Form f, int radius) { }
+    public static void Round(ToolStripDropDown m, int radius)
+    {
+        if (m.Width <= 0 || m.Height <= 0) return;
+        using (var path = new GraphicsPath())
+        {
+            int d = radius * 2;
+            var r = new Rectangle(0, 0, m.Width, m.Height);
+            path.AddArc(r.X, r.Y, d, d, 180, 90);
+            path.AddArc(r.Right - d, r.Y, d, d, 270, 90);
+            path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+            path.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
+            path.CloseFigure();
+            var old = m.Region;
+            m.Region = new Region(path);
+            if (old != null) old.Dispose();
+        }
+    }
+}
+
+public class MenuColors : ProfessionalColorTable
+{
+    public override Color ToolStripDropDownBackground { get { return Color.Transparent; } }
+    public override Color ImageMarginGradientBegin { get { return Color.Transparent; } }
+    public override Color ImageMarginGradientMiddle { get { return Color.Transparent; } }
+    public override Color ImageMarginGradientEnd { get { return Color.Transparent; } }
+    public override Color MenuBorder { get { return Color.Transparent; } }
+    public override Color MenuItemBorder { get { return Color.Transparent; } }
+    public override Color MenuItemSelected { get { return Color.Transparent; } }
+    public override Color MenuItemSelectedGradientBegin { get { return Color.Transparent; } }
+    public override Color MenuItemSelectedGradientEnd { get { return Color.Transparent; } }
+    public override Color SeparatorDark { get { return Color.Transparent; } }
+    public override Color SeparatorLight { get { return Color.Transparent; } }
+}

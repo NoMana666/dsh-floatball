@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "DSH 桌面悬浮球",
+    "description": "在桌面上放一个随 DSH 启停的鲸鱼悬浮球：峰时粉色、谷时蓝色、DSH 未运行灰色；悬停有光晕、点击有收缩动效，单击唤起 DSH 窗口，右键可切换“随 DSH 自动启动”。",
+    "detail": "docs/DETAIL.md"
+  }
+}
