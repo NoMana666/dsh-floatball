@@ -5,6 +5,8 @@ and lights up when an approval is waiting for you.
 
 > Native Windows only: PowerShell + WinForms layered window. No Electron, no extra runtime.
 
+> ▶ [Demo video (Bilibili, 41s)](https://www.bilibili.com/video/BV1UjyfzrE46/)
+
 ![ball](docs/screenshot-ball.png)
 
 ## Features
