@@ -4,6 +4,8 @@
 
 > 纯 Windows 原生实现：PowerShell + WinForms 分层窗口，不需要 Electron、不需要额外运行库。
 
+> ▶ [演示视频（B站，41 秒）](https://www.bilibili.com/video/BV1UjyfzrE46/) · [插件市场](https://dshmarket.com/zh/)
+
 ![悬浮球](docs/screenshot-ball.png)
 
 ## 功能
